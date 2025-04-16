@@ -13,7 +13,7 @@ const initialState: UsersState = {
   error: null,
 };
 
-// Async thunk for fetching users
+// thunk for fetching users
 export const fetchUsers = createAsyncThunk("users/fetchUsers", async () => {
   const response = await fetch("https://dummyjson.com/users");
   const data = await response.json();

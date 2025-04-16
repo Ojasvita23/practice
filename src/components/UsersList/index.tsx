@@ -6,10 +6,12 @@ import { useDispatch, useSelector } from "react-redux";
 import UserThread from "../UserInfo";
 import { AppDispatch, RootState } from "@/lib/store";
 import { decrement, increment } from "@/lib/features/counter/counterSlice";
-import { fetchUsers } from "@/lib/features/users/userListCounter";
+import { fetchUsers } from "@/lib/features/users/userSlice";
+import { useRouter } from "next/navigation";
 
 const UsersList = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const router = useRouter();
   const { users, loading, error } = useSelector(
     (state: RootState) => state.users
   );
@@ -26,6 +28,10 @@ const UsersList = () => {
       .toLowerCase()
       .includes(searchValue.toLowerCase())
   );
+
+  const handleUserClick = (id: string) => {
+    router.push(`/user/${id}`);
+  };
 
   return (
     <div>
@@ -56,7 +62,15 @@ const UsersList = () => {
         />
       </div>
       {filteredUsers.map((item) => {
-        return <UserThread key={item.id} userInfo={item} />;
+        return (
+          <div
+            key={item.id}
+            onClick={() => handleUserClick(item.id.toString())}
+            className="cursor-pointer"
+          >
+            <UserThread userInfo={item} />
+          </div>
+        );
       })}
     </div>
   );
