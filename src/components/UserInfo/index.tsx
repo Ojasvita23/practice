@@ -1,4 +1,4 @@
-import { UserInterface } from "../UsersList/types";
+import { UserInterface } from "../../components/UsersList/types";
 
 const UserThread = ({ userInfo }: { userInfo: UserInterface }) => {
   return (

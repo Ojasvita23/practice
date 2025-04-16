@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import UserThread from "../UserInfo";
-import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/lib/store";
 import { decrement, increment } from "@/lib/features/counter/counterSlice";
 import { fetchUsers } from "@/lib/features/users/userListCounter";
