@@ -66,7 +66,7 @@ const UsersList = () => {
           <div
             key={item.id}
             onClick={() => handleUserClick(item.id.toString())}
-            className="cursor-pointer"
+            style={{ cursor: "pointer" }}
           >
             <UserThread userInfo={item} />
           </div>
