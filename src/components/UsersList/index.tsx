@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 
 import UserThread from "../UserInfo";
 import { AppDispatch, RootState } from "@/lib/store";
-import { decrement, increment } from "@/lib/features/counter/counterSlice";
 import { fetchUsers } from "@/lib/features/users/userSlice";
 import { useRouter } from "next/navigation";
 
@@ -15,7 +14,6 @@ const UsersList = () => {
   const { users, loading, error } = useSelector(
     (state: RootState) => state.users
   );
-  const count = useSelector((state: RootState) => state.counter.value);
 
   const [searchValue, setSearchValue] = useState("");
 
@@ -35,23 +33,6 @@ const UsersList = () => {
 
   return (
     <div>
-      <div>
-        <div>
-          <button
-            aria-label="Increment value"
-            onClick={() => dispatch(increment())}
-          >
-            Increment
-          </button>
-          <span>{count}</span>
-          <button
-            aria-label="Decrement value"
-            onClick={() => dispatch(decrement())}
-          >
-            Decrement
-          </button>
-        </div>
-      </div>
       <div>
         <input
           type="text"
