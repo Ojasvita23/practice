@@ -1,7 +1,8 @@
-import Image from "next/image";
+import UsersList from "./UsersList";
 
 export default function Home() {
+
   return (
-   <div>hello</div>
+    <UsersList />
   );
 }
