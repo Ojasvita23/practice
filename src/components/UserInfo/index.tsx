@@ -2,13 +2,15 @@ import { UserInterface } from "../../components/UsersList/types";
 import { capitalizeFirstLetter } from "@/utils/commonFunctions";
 
 const UserThread = ({ userInfo }: { userInfo: UserInterface }) => {
+  const { id, firstName, lastName, email, gender } = userInfo || {};
+
   return (
-    <div key={userInfo.id} className="border-1 border-grey-300 mb-1 p-2">
+    <div key={id} className="border-1 border-grey-300 mb-1 p-2">
       <h1>
-        Name: {userInfo.firstName} {userInfo.lastName}
+        Name: {firstName} {lastName}
       </h1>
-      <p>Email: {userInfo.email}</p>
-      <p>Gender: {capitalizeFirstLetter(userInfo.gender)}</p>
+      <p>Email: {email}</p>
+      <p>Gender: {capitalizeFirstLetter(gender)}</p>
     </div>
   );
 };
