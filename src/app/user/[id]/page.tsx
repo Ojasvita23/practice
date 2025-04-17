@@ -31,13 +31,20 @@ const UserDetail = () => {
 
   if (!user) return <div>No user data available</div>;
 
+  const {firstName, lastName, email, age, gender, address} = user;
+
+  const fullAddress = address.address + ', ' + address.city + ', ' + address.state + ', ' + address.country;
+
   return (
     <div key={user.id} className="border-1 border-grey-300 mb-1 p-2">
       <div>User detail:</div>
       <h1>
-        Name: {user.firstName} {user.lastName}
+        Name: {firstName} {lastName}
       </h1>
-      <p>Email: {user.email}</p>
+      <p>Email: {email}</p>
+      <p>Age: {age}</p>
+      <p>Gender: {gender}</p>
+      <p>Address: {fullAddress}</p>
     </div>
   );
 };
