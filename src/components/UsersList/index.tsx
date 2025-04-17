@@ -2,11 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
 
 import UserThread from "../UserInfo";
+import SearchInput from "../SearchInput";
+import Autocomplete from "../Autocomplete";
 import { AppDispatch, RootState } from "@/lib/store";
 import { fetchUsers } from "@/lib/features/users/userSlice";
-import { useRouter } from "next/navigation";
 
 const UsersList = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -35,28 +37,26 @@ const UsersList = () => {
     router.push(`/user/${id}`);
   };
 
+  const genderAutocompleteOptions = [
+    { value: "", label: "All Genders" },
+    { value: "male", label: "Male" },
+    { value: "female", label: "Female" },
+    { value: "other", label: "Other" },
+  ];
+
   return (
     <div>
       <h1>Users List</h1>
       <div>
-        <input
-          type="text"
-          placeholder="Search by name..."
+        <SearchInput
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
-          className="mb-4 p-2 w-full"
         />
-
-        <select
+        <Autocomplete
           value={genderFilter}
           onChange={(e) => setGenderFilter(e.target.value)}
-          className="mb-4 p-2 w-full"
-        >
-          <option value="">All Genders</option>
-          <option value="male">Male</option>
-          <option value="female">Female</option>
-          <option value="other">Other</option>
-        </select>
+          options={genderAutocompleteOptions}
+        />
       </div>
       {filteredUsers.map((item) => {
         return (
@@ -72,4 +72,5 @@ const UsersList = () => {
     </div>
   );
 };
+
 export default UsersList;
