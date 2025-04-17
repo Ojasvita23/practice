@@ -16,16 +16,20 @@ const UsersList = () => {
   );
 
   const [searchValue, setSearchValue] = useState("");
+  const [genderFilter, setGenderFilter] = useState("");
 
   useEffect(() => {
     dispatch(fetchUsers());
   }, [dispatch]);
 
-  const filteredUsers = users.filter((user) =>
-    `${user.firstName} ${user.lastName}`
+  const filteredUsers = users.filter((user) => {
+    const matchesName = `${user.firstName} ${user.lastName}`
       .toLowerCase()
-      .includes(searchValue.toLowerCase())
-  );
+      .includes(searchValue.toLowerCase());
+    const matchesGender =
+      genderFilter === "" || user.gender.toLowerCase() === genderFilter;
+    return matchesName && matchesGender;
+  });
 
   const handleUserClick = (id: string) => {
     router.push(`/user/${id}`);
@@ -42,6 +46,17 @@ const UsersList = () => {
           onChange={(e) => setSearchValue(e.target.value)}
           className="mb-4 p-2 w-full"
         />
+
+        <select
+          value={genderFilter}
+          onChange={(e) => setGenderFilter(e.target.value)}
+          className="mb-4 p-2 w-full"
+        >
+          <option value="">All Genders</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="other">Other</option>
+        </select>
       </div>
       {filteredUsers.map((item) => {
         return (
