@@ -1,10 +1,5 @@
 import React from "react";
-
-interface AutocompleteProps {
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-  options: { value: string; label: string }[];
-}
+import { AutocompleteProps } from "./types";
 
 const Autocomplete: React.FC<AutocompleteProps> = ({
   value,

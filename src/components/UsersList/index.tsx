@@ -7,12 +7,15 @@ import { useRouter } from "next/navigation";
 import UserThread from "../UserInfo";
 import SearchInput from "../SearchInput";
 import Autocomplete from "../Autocomplete";
+
 import { AppDispatch, RootState } from "@/lib/store";
 import { fetchUsers } from "@/lib/features/users/userSlice";
+import { genderAutocompleteOptions } from "@/constants/autocompleteOptions";
 
 const UsersList = () => {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
+
   const { users, loading, error } = useSelector(
     (state: RootState) => state.users
   );
@@ -24,51 +27,54 @@ const UsersList = () => {
     dispatch(fetchUsers());
   }, [dispatch]);
 
-  const filteredUsers = users.filter((user) => {
-    const matchesName = `${user.firstName} ${user.lastName}`
-      .toLowerCase()
-      .includes(searchValue.toLowerCase());
-    const matchesGender =
-      genderFilter === "" || user.gender.toLowerCase() === genderFilter;
-    return matchesName && matchesGender;
-  });
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setSearchValue(e.target.value);
+
+  const handleGenderChange = (e: React.ChangeEvent<HTMLSelectElement>) =>
+    setGenderFilter(e.target.value);
 
   const handleUserClick = (id: string) => {
     router.push(`/user/${id}`);
   };
 
-  const genderAutocompleteOptions = [
-    { value: "", label: "All Genders" },
-    { value: "male", label: "Male" },
-    { value: "female", label: "Female" },
-    { value: "other", label: "Other" },
-  ];
+  const filteredUsers = users.filter((user) => {
+    const fullName = `${user.firstName} ${user.lastName}`.toLowerCase();
+    const matchesName = fullName.includes(searchValue.toLowerCase());
+    const matchesGender =
+      genderFilter === "" || user.gender.toLowerCase() === genderFilter;
+    return matchesName && matchesGender;
+  });
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+  if (!users?.length) return <div>No user data available</div>;
 
   return (
     <div>
       <h1>Users List</h1>
+
       <div>
-        <SearchInput
-          value={searchValue}
-          onChange={(e) => setSearchValue(e.target.value)}
-        />
+        <SearchInput value={searchValue} onChange={handleSearchChange} />
         <Autocomplete
           value={genderFilter}
-          onChange={(e) => setGenderFilter(e.target.value)}
+          onChange={handleGenderChange}
           options={genderAutocompleteOptions}
         />
       </div>
-      {filteredUsers.map((item) => {
-        return (
+
+      {filteredUsers.length ? (
+        filteredUsers.map((user) => (
           <div
-            key={item.id}
-            onClick={() => handleUserClick(item.id.toString())}
+            key={user.id}
+            onClick={() => handleUserClick(user.id.toString())}
             style={{ cursor: "pointer" }}
           >
-            <UserThread userInfo={item} />
+            <UserThread userInfo={user} />
           </div>
-        );
-      })}
+        ))
+      ) : (
+        <div>No matching users found.</div>
+      )}
     </div>
   );
 };
