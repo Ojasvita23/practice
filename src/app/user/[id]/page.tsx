@@ -2,9 +2,9 @@
 
 import { useParams } from "next/navigation";
 
+import useFetchData from "@/hooks/useFetchData";
 import { fetchUserDetails } from "@/lib/features/users/userDetailSlice";
 import { UserInterface } from "@/components/UsersList/types";
-import useFetchData from "@/hooks/useFetchData";
 import { selectUserDetailData } from "@/lib/features/users/userSelectors.ts";
 import { capitalizeFirstLetter } from "@/utils/commonFunctions";
 

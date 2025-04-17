@@ -1,7 +1,6 @@
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 
-import { AppDispatch, RootState } from "@/lib/store";
+import { RootState } from "@/lib/store";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 
 type AsyncThunkAction = (...args: any[]) => any;
