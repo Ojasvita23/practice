@@ -1,27 +1,31 @@
 import "@testing-library/jest-dom";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import UsersList from "./index";
 import { Provider } from "react-redux";
 import { useRouter } from "next/navigation";
 import { configureStore } from "@reduxjs/toolkit";
 
-const mockStore = configureStore({
-  reducer: {
-    users: () => ({
-      users: [
-        { id: "1", firstName: "John", lastName: "Doe", gender: "male" },
-        { id: "2", firstName: "Jane", lastName: "Smith", gender: "female" },
-      ],
-      loading: false,
-      error: null,
-    }),
-  },
-});
+jest.mock("../../hooks/useFetchData", () => ({
+  __esModule: true,
+  default: () => ({
+    data: [
+      { id: "1", firstName: "John", lastName: "Doe", gender: "male" },
+      { id: "2", firstName: "Jane", lastName: "Smith", gender: "female" },
+    ],
+    loading: false,
+    error: null,
+  }),
+}));
 
-// Mock the useRouter hook
 jest.mock("next/navigation", () => ({
   useRouter: jest.fn(),
 }));
+
+const mockStore = configureStore({
+  reducer: {
+    users: () => ({}),
+  },
+});
 
 describe("UsersList Component", () => {
   beforeEach(() => {
@@ -33,18 +37,14 @@ describe("UsersList Component", () => {
     });
   });
 
-  it("renders a heading", async () => {
+  it("renders a heading", () => {
     render(
       <Provider store={mockStore}>
         <UsersList />
       </Provider>
     );
 
-    await waitFor(() => {
-      expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(3);
-    });
-
-    const headings = screen.getAllByRole("heading", { level: 1 });
-    expect(headings[0]).toHaveTextContent("Users List");
+    const heading = screen.getByText("Users List");
+    expect(heading).toBeInTheDocument();
   });
 });

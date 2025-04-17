@@ -1,11 +1,24 @@
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/lib/store";
+import { useDispatch, useSelector } from "react-redux";
+
+import { AppDispatch, RootState } from "@/lib/store";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 
 type AsyncThunkAction = (...args: any[]) => any;
 
-const useFetchData = (fetchAction: AsyncThunkAction, params?: any) => {
-  const dispatch = useDispatch<AppDispatch>();
+interface FetchConfig<T> {
+  fetchAction: AsyncThunkAction;
+  selector: (state: RootState) => {
+    data: T | null;
+    loading: boolean;
+    error: string | null;
+  };
+  params?: any;
+}
+
+const useFetchData = <T>({ fetchAction, selector, params }: FetchConfig<T>) => {
+  const dispatch = useAppDispatch();
+  const { data, loading, error } = useAppSelector(selector);
 
   useEffect(() => {
     if (params !== undefined) {
@@ -14,6 +27,8 @@ const useFetchData = (fetchAction: AsyncThunkAction, params?: any) => {
       dispatch(fetchAction());
     }
   }, [dispatch, fetchAction, params]);
+
+  return { data, loading, error };
 };
 
 export default useFetchData;

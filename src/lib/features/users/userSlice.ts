@@ -2,13 +2,14 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { UserInterface } from "@/components/UsersList/types";
 
 interface UsersState {
-  users: UserInterface[];
+  data: UserInterface[];
   loading: boolean;
   error: string | null;
 }
 
 const initialState: UsersState = {
-  users: [],
+  // users: [],
+  data: [],
   loading: false,
   error: null,
 };
@@ -32,7 +33,7 @@ const usersSlice = createSlice({
       })
       .addCase(fetchUsers.fulfilled, (state, action) => {
         state.loading = false;
-        state.users = action.payload;
+        state.data = action.payload;
       })
       .addCase(fetchUsers.rejected, (state, action) => {
         state.loading = false;
