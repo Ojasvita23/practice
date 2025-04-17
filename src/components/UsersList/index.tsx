@@ -11,9 +11,9 @@ import Autocomplete from "../Autocomplete";
 import { AppDispatch, RootState } from "@/lib/store";
 import { fetchUsers } from "@/lib/features/users/userSlice";
 import { genderAutocompleteOptions } from "@/constants/autocompleteOptions";
+import useFetchData from "@/hooks/useFetchData";
 
 const UsersList = () => {
-  const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
 
   const { users, loading, error } = useSelector(
@@ -23,9 +23,7 @@ const UsersList = () => {
   const [searchValue, setSearchValue] = useState("");
   const [genderFilter, setGenderFilter] = useState("");
 
-  useEffect(() => {
-    dispatch(fetchUsers());
-  }, [dispatch]);
+  useFetchData(fetchUsers);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setSearchValue(e.target.value);
@@ -41,7 +39,7 @@ const UsersList = () => {
   // But in this scenario, it will not make any difference.
 
   const filteredUsers = useMemo(() => {
-    users.filter((user) => {
+    return users.filter((user) => {
       const fullName = `${user.firstName} ${user.lastName}`.toLowerCase();
       const matchesName = fullName.includes(searchValue.toLowerCase());
       const matchesGender =

@@ -1,16 +1,15 @@
 "use client";
 
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useParams } from "next/navigation";
-import { useEffect } from "react";
 
-import { AppDispatch, RootState } from "@/lib/store";
+import { RootState } from "@/lib/store";
 import { fetchUserDetails } from "@/lib/features/users/userDetailSlice";
 import { UserInterface } from "@/components/UsersList/types";
+import useFetchData from "@/hooks/useFetchData";
 
 const UserDetail = () => {
   const { id } = useParams();
-  const dispatch = useDispatch<AppDispatch>();
   const { user, loading, error } = useSelector(
     (state: RootState) =>
       state.userDetail as {
@@ -20,11 +19,7 @@ const UserDetail = () => {
       }
   );
 
-  useEffect(() => {
-    if (typeof id === "string") {
-      dispatch(fetchUserDetails(id));
-    }
-  }, [dispatch, id]);
+  useFetchData(fetchUserDetails, id);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
