@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 
@@ -37,13 +37,18 @@ const UsersList = () => {
     router.push(`/user/${id}`);
   };
 
-  const filteredUsers = users.filter((user) => {
-    const fullName = `${user.firstName} ${user.lastName}`.toLowerCase();
-    const matchesName = fullName.includes(searchValue.toLowerCase());
-    const matchesGender =
-      genderFilter === "" || user.gender.toLowerCase() === genderFilter;
-    return matchesName && matchesGender;
-  });
+  // Memoize the filtered users to avoid unnecessary re-renders
+  // But in this scenario, it will not make any difference.
+
+  const filteredUsers = useMemo(() => {
+    users.filter((user) => {
+      const fullName = `${user.firstName} ${user.lastName}`.toLowerCase();
+      const matchesName = fullName.includes(searchValue.toLowerCase());
+      const matchesGender =
+        genderFilter === "" || user.gender.toLowerCase() === genderFilter;
+      return matchesName && matchesGender;
+    });
+  }, [users, searchValue, genderFilter]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
