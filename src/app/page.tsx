@@ -1,8 +1,12 @@
+import Link from "next/link";
 import UsersList from "../components/UsersList";
 
 export default function Home() {
-
   return (
-    <UsersList />
+    <>
+      <Link href="/implementLazyLoading">Implement lazy loading</Link>
+      <UsersList />
+    </>
   );
 }
+
